@@ -78,9 +78,7 @@ GameManager.prototype.addRandomTile = function () {
 
 // Sends the updated grid to the actuator
 GameManager.prototype.actuate = function () {
-  if (this.storageManager.getBestScore() < this.score) {
-    this.storageManager.setBestScore(this.score);
-  }
+  
 
   // Clear the state when the game is over (game over only, not win)
   if (this.over) {
@@ -167,6 +165,11 @@ GameManager.prototype.move = function (direction) {
           // Update the score
           self.score += merged.value;
 		  self.actuator.updateFai(merged.value);
+		  
+		  if (self.storageManager.getBestScore() < merged.value) {
+				self.storageManager.setBestScore(merged.value);
+			}
+		  
           // The mighty 2048 tile
           if (merged.value === 2048) self.won = true;
         } else {

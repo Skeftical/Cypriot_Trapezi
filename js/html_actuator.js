@@ -177,7 +177,43 @@ HTMLActuator.prototype.updateScore = function (score) {
 };
 
 HTMLActuator.prototype.updateBestScore = function (bestScore) {
-  this.bestContainer.textContent = this.scoreContainer.textContent;
+    var fai="";
+	switch(bestScore){
+		case "0":
+			fai="μανιταράκια";
+			break;
+		case "4":
+			fai="πίττα";
+			break;
+		case "8":
+			fai="χαλλούμι";
+			break;
+		case "16":
+			fai="σουβλάκια";
+			break;
+		case "32":
+			fai="μακαρόνια του φούρνου";
+			break;
+		case "64":
+			fai="κουπέπια";
+			break;
+		case "128":
+			fai="σιεφταλιά";
+			break;
+		case "256":
+			fai="λουκάνικα";
+			break;
+		case "512":
+			fai="παστουρμάς";
+			break;
+		case "1024":
+			fai="σούβλα";
+			break;
+		case "2048":
+			fai="τραπέζι";
+			break;
+	  }
+  this.bestContainer.textContent =fai ;
 };
 
 HTMLActuator.prototype.message = function (won) {

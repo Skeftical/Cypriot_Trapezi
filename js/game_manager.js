@@ -17,6 +17,7 @@ function GameManager(size, InputManager, Actuator, StorageManager) {
 GameManager.prototype.restart = function () {
   this.storageManager.clearGameState();
   this.actuator.continueGame(); // Clear the game won/lost message
+  this.actuator.resetScore();
   this.setup();
 };
 
@@ -165,7 +166,7 @@ GameManager.prototype.move = function (direction) {
 
           // Update the score
           self.score += merged.value;
-
+		  self.actuator.updateFai(merged.value);
           // The mighty 2048 tile
           if (merged.value === 2048) self.won = true;
         } else {

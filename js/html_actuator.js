@@ -3,9 +3,9 @@ function HTMLActuator() {
   this.scoreContainer   = document.querySelector(".score-container");
   this.bestContainer    = document.querySelector(".best-container");
   this.messageContainer = document.querySelector(".game-message");
-  this.sharingContainer = document.querySelector(".score-sharing");
-
+  this.scoreContainer.textContent="μανιταράκια";
   this.score = 0;
+  this.value=0;
 }
 
 HTMLActuator.prototype.actuate = function (grid, metadata) {
@@ -36,12 +36,13 @@ HTMLActuator.prototype.actuate = function (grid, metadata) {
   });
 };
 
+HTMLActuator.prototype.resetScore = function () {
+  this.score=0;
+  this.scoreContainer.textContent="μανιταράκια";
+};
+
 // Continues the game (both restart and keep playing)
 HTMLActuator.prototype.continueGame = function () {
-  if (typeof ga !== "undefined") {
-    ga("send", "event", "game", "restart");
-  }
-
   this.clearMessage();
 };
 
@@ -61,13 +62,13 @@ HTMLActuator.prototype.addTile = function (tile) {
 
   // We can't use classlist because it somehow glitches when replacing classes
   var classes = ["tile", "tile-" + tile.value, positionClass];
-
+  
   if (tile.value > 2048) classes.push("tile-super");
-
+  	
   this.applyClasses(wrapper, classes);
 
   inner.classList.add("tile-inner");
-  inner.textContent = tile.value;
+  inner.textContent = "";//tile.value;
 
   if (tile.previousPosition) {
     // Make sure that the tile gets rendered in the previous position first
@@ -93,6 +94,7 @@ HTMLActuator.prototype.addTile = function (tile) {
 
   // Put the tile on the board
   this.tileContainer.appendChild(wrapper);
+  
 };
 
 HTMLActuator.prototype.applyClasses = function (element, classes) {
@@ -108,61 +110,86 @@ HTMLActuator.prototype.positionClass = function (position) {
   return "tile-position-" + position.x + "-" + position.y;
 };
 
+HTMLActuator.prototype.updateFai = function (value) {
+// var scoreContainer=document.querySelector(".score-container");
+ //this.clearContainer(this.scoreContainer);
+ 
+ var fai="";
+ if (value>this.value){ 
+     
+     this.value=value;
+	 switch(value){
+		case 4:
+			fai="πίττα";
+			break;
+		case 8:
+			fai="χαλλούμι";
+			break;
+		case 16:
+			fai="σουβλάκια";
+			break;
+		case 32:
+			fai="μακαρόνια του φούρνου";
+			break;
+		case 64:
+			fai="κουπέπια";
+			break;
+		case 128:
+			fai="σιεφταλιά";
+			break;
+		case 256:
+			fai="λουκάνικα";
+			break;
+		case 512:
+			fai="παστουρμάς";
+			break;
+		case 1024:
+			fai="σούβλα";
+			break;
+		case 2048:
+			fai="τραπέζι";
+			break;
+	  }
+     this.scoreContainer.textContent = fai;
+  }
+  
+ 
+
+  }
+
 HTMLActuator.prototype.updateScore = function (score) {
-  this.clearContainer(this.scoreContainer);
+ // this.clearContainer(this.scoreContainer);
 
   var difference = score - this.score;
+  
   this.score = score;
+  
+  
+  //this.scoreContainer.textContent = this.score;
 
-  this.scoreContainer.textContent = this.score;
-
-  if (difference > 0) {
+/*    if (difference > 0) {
     var addition = document.createElement("div");
     addition.classList.add("score-addition");
     addition.textContent = "+" + difference;
 
     this.scoreContainer.appendChild(addition);
-  }
+  } */
 };
 
 HTMLActuator.prototype.updateBestScore = function (bestScore) {
-  this.bestContainer.textContent = bestScore;
+  this.bestContainer.textContent = this.scoreContainer.textContent;
 };
 
 HTMLActuator.prototype.message = function (won) {
   var type    = won ? "game-won" : "game-over";
   var message = won ? "You win!" : "Game over!";
 
-  if (typeof ga !== "undefined") {
-    ga("send", "event", "game", "end", type, this.score);
-  }
-
   this.messageContainer.classList.add(type);
   this.messageContainer.getElementsByTagName("p")[0].textContent = message;
-
-  this.clearContainer(this.sharingContainer);
-  this.sharingContainer.appendChild(this.scoreTweetButton());
-  twttr.widgets.load();
 };
 
 HTMLActuator.prototype.clearMessage = function () {
   // IE only takes one value to remove at a time.
   this.messageContainer.classList.remove("game-won");
   this.messageContainer.classList.remove("game-over");
-};
-
-HTMLActuator.prototype.scoreTweetButton = function () {
-  var tweet = document.createElement("a");
-  tweet.classList.add("twitter-share-button");
-  tweet.setAttribute("href", "https://twitter.com/share");
-  tweet.setAttribute("data-via", "gabrielecirulli");
-  tweet.setAttribute("data-url", "http://git.io/2048");
-  tweet.setAttribute("data-counturl", "http://gabrielecirulli.github.io/2048/");
-  tweet.textContent = "Tweet";
-
-  var text = "I scored " + this.score + " points at 2048, a game where you " +
-             "join numbers to score high! #2048game";
-  tweet.setAttribute("data-text", text);
-
-  return tweet;
 };

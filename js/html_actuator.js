@@ -129,7 +129,7 @@ HTMLActuator.prototype.updateFai = function (value) {
 			fai="σουβλάκια";
 			break;
 		case 32:
-			fai="μακαρόνια του φούρνου";
+			fai="παστίτσιο";
 			break;
 		case 64:
 			fai="κουπέπια";
@@ -192,7 +192,7 @@ HTMLActuator.prototype.updateBestScore = function (bestScore) {
 			fai="σουβλάκια";
 			break;
 		case "32":
-			fai="μακαρόνια του φούρνου";
+			fai="παστίτσιο";
 			break;
 		case "64":
 			fai="κουπέπια";
